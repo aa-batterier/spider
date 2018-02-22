@@ -36,6 +36,11 @@ struct Node *new_node(Memory *data);
 void add_last(List *list,Memory *data);
 void remove_first(List *list);
 Memory *get_first(List *list);
+void remove_list(List *list);
+
+/* memory.c */
+Memory *create_memory(void);
+void free_memory(Memory *removeMemory);
 
 /* text.c */
 size_t write_web_page(void *content,size_t size,size_t nmemb,void *userp);

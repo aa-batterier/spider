@@ -30,36 +30,44 @@ void extract_web_addresses(char *content,const char *addOnAddr,List *list) //,FI
 	char *prev = content,*correct = content;
 	for (;;)
 	{
-		Memory *address = (Memory*)malloc(sizeof(Memory));
-		address->text = (char*)malloc(1);
-		address->size = 0;
-		if ((prev = strstr(correct,"href=")) == NULL)
+		Memory *address;
+		if ((address = create_memory()) == NULL)
 		{
-			break;
+			fprintf(stderr,"create_memory failed\n");
 		}
-		if ((prev = strtok(prev,"\'\"")) == NULL)
+		else
 		{
-			break;
-		}
-		if ((correct = strtok(NULL,"\'\"")) == NULL)
-		{
-			break;
-		}
-		int i = 0;
-		for (; *correct != '\0'; correct++,i++)
-		{
-			if (i == address->size)
+			if ((prev = strstr(correct,"href=")) == NULL)
 			{
-				address->size = address->size*2+1;
-				address->text = (char*)realloc(address->text,address->size);
+				break;
 			}
-			address->text[i] = *correct;
+			if ((prev = strtok(prev,"\'\"")) == NULL)
+			{
+				break;
+			}
+			if ((correct = strtok(NULL,"\'\"")) == NULL)
+			{
+				break;
+			}
+			int i = 0;
+			for (; *correct != '\0'; correct++,i++)
+			{
+				if (i == address->size)
+				{
+					address->size = address->size*2+1;
+					if ((address->text = (char*)realloc(address->text,address->size)) == NULL)
+					{
+						fprintf(stderr,"not enough space, realloc returned NULL.\n");
+					}
+				}
+				address->text[i] = *correct;
+			}
+			address->text[i] = '\0';
+			//fprintf(out,"%s\n",address->text);
+			add_address(addOnAddr,address);
+			add_last(list,address);
+			correct++;
 		}
-		address->text[i] = '\0';
-		//fprintf(out,"%s\n",address->text);
-		add_address(addOnAddr,address);
-		add_last(list,address);
-		correct++;
 	}
 }
 

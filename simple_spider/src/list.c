@@ -31,17 +31,24 @@ struct Node *new_node(Memory *data)
  */
 void add_last(List *list,Memory *data)
 {
-	struct Node *newNode = new_node(data);
-	if (list->first == NULL)
+	struct Node *newNode;
+	if ((newNode = new_node(data)) == NULL)
 	{
-		list->first = newNode;
+		fprintf(stderr,"new_node failed\n");
 	}
 	else
 	{
-		list->last->next = newNode;
+		if (list->first == NULL)
+		{
+			list->first = newNode;
+		}
+		else
+		{
+			list->last->next = newNode;
+		}
+		list->last = newNode;
+		list->size++;
 	}
-	list->last = newNode;
-	list->size++;
 }
 
 /*
@@ -55,8 +62,7 @@ void remove_first(List *list)
 	if (removeNode != NULL)
 	{
 		list->first = removeNode->next;
-		free(removeNode->data->text); // Har allockerat detta i extract_web_address.
-		free(removeNode->data);
+		free_memory(removeNode->data); // Borde jag ha detta här?
 		free(removeNode);
 		list->size--;
 	}
@@ -74,4 +80,16 @@ Memory *get_first(List *list)
 		return list->first->data;
 	}
 	return NULL;
+}
+
+/*
+ * Function: remove_list
+ * Usage: Removes the list.
+ * -------------------------
+ */
+void remove_list(List *list)
+{
+	while (list->size > 0)
+		remove_first(list);
+	free(list);
 }
