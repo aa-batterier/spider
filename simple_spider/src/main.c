@@ -32,7 +32,7 @@ int main(int argc,char *argv[])
 	}
 	get_web_page(argv[1],startMemory);
 	extract_web_addresses(startMemory->text,argv[1],list);
-	free_memory(startMemory); // Borde kanske kommentera bort detta (hanteras i remove_first funktionen.
+	free_memory(startMemory);
 	while (list->size > 0)
 	{
 		Memory *address = get_first(list),*loopMemory;
@@ -46,7 +46,7 @@ int main(int argc,char *argv[])
 		get_web_page(address->text,loopMemory);
 		extract_web_addresses(loopMemory->text,address->text,list);
 		remove_first(list);
-		free_memory(loopMemory); // Ha koll på denna raden, kan vara problemmet, ska kanske vara under remove_first?
+		free_memory(loopMemory);
 	}
 	fclose(out);
 	remove_list(list);

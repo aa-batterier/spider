@@ -79,7 +79,11 @@ void extract_web_addresses(char *content,const char *addOnAddr,List *list) //,FI
 void add_address(const char *addOnAddr,Memory *address)
 {
 	int addrLen = strlen(addOnAddr),last = addrLen-1;
-	char *cleanAddr = (char*)malloc(addrLen);
+	char *cleanAddr;
+	if ((cleanAddr = (char*)malloc(addrLen)) == NULL)
+	{
+		fprintf(stderr,"no more space, malloc returned NULL\n");
+	}
 	strncpy(cleanAddr,addOnAddr,addrLen);
 	cleanAddr[addrLen] = '\0';
 	if (cleanAddr[last] == '/')
@@ -91,7 +95,10 @@ void add_address(const char *addOnAddr,Memory *address)
 	{
 		char *tmp = address->text;
 		address->size += addrLen;
-		address->text = (char*)malloc(address->size);
+		if ((address->text = (char*)malloc(address->size)) == NULL)
+		{
+			fprintf(stderr,"no more space, malloc returned NULL\n");
+		}
 		address->text[0] = '\0';
 		strcat(strcat(address->text,cleanAddr),tmp);
 		free(tmp);
