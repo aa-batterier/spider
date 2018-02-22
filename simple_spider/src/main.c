@@ -23,7 +23,7 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 	get_web_page(argv[1],memory);
-	extract_web_addresses(memory->text,argv[1],list,out);
+	extract_web_addresses(memory->text,argv[1],list);
 	free(memory->text);
 	free(memory);
 	while (list->size > 0)
@@ -31,13 +31,13 @@ int main(int argc,char *argv[])
 		Memory *address = get_first(list),*memoryLoop = (Memory*)malloc(sizeof(Memory));
 		memoryLoop->text = (char*)malloc(1);
 		memoryLoop->size = 0;
-		//fprintf(out,"%s\n",address->text);
+		fprintf(out,"%s\n",address->text);
 		get_web_page(address->text,memoryLoop);
-		extract_web_addresses(memoryLoop->text,address->text,list,out);
+		extract_web_addresses(memoryLoop->text,address->text,list);
 		free(memoryLoop->text);
 		free(memoryLoop);
 		remove_first(list);
-		printf("%d\n",list->size);
+		printf("Number of elements in list: %d\n",list->size);
 	}
 	fclose(out);
 	exit(0);

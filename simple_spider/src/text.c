@@ -25,7 +25,7 @@ size_t write_web_page(void *content,size_t size,size_t nmemb,void *userp)
  * Usage: Extract the web addresses from the dynamic buffer to the list/queue.
  * ----------------------------------------------------------------------------
  */
-void extract_web_addresses(char *content,const char *addOnAddr,List *list,FILE *out)
+void extract_web_addresses(char *content,const char *addOnAddr,List *list) //,FILE *out)
 {
 	char *prev = content,*correct = content;
 	for (;;)
@@ -56,7 +56,7 @@ void extract_web_addresses(char *content,const char *addOnAddr,List *list,FILE *
 			address->text[i] = *correct;
 		}
 		address->text[i] = '\0';
-		fprintf(out,"%s\n",address->text);
+		//fprintf(out,"%s\n",address->text);
 		add_address(addOnAddr,address);
 		add_last(list,address);
 		correct++;

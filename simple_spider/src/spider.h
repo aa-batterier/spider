@@ -39,7 +39,7 @@ Memory *get_first(List *list);
 
 /* text.c */
 size_t write_web_page(void *content,size_t size,size_t nmemb,void *userp);
-void extract_web_addresses(char *content,const char *addOnAddr,List *list,FILE *out);
+void extract_web_addresses(char *content,const char *addOnAddr,List *list); //,FILE *out);
 void add_address(const char *addOnAddr,Memory *address);
 
 #endif
