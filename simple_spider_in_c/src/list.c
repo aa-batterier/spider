@@ -31,24 +31,18 @@ struct Node *new_node(Memory *data)
  */
 void add_last(List *list,Memory *data)
 {
-	struct Node *newNode;
-	if ((newNode = new_node(data)) == NULL)
+	struct Node *newNode = NULL;
+	newNode = new_node(data);
+	if (list->first == NULL)
 	{
-		fprintf(stderr,"new_node failed\n");
+		list->first = newNode;
 	}
 	else
 	{
-		if (list->first == NULL)
-		{
-			list->first = newNode;
-		}
-		else
-		{
-			list->last->next = newNode;
-		}
-		list->last = newNode;
-		list->size++;
+		list->last->next = newNode;
 	}
+	list->last = newNode;
+	list->size++;
 }
 
 /*
@@ -59,13 +53,14 @@ void add_last(List *list,Memory *data)
 void remove_first(List *list)
 {
 	struct Node *removeNode = list->first;
-	if (removeNode != NULL)
-	{
-		list->first = removeNode->next;
-		free_memory(removeNode->data); // Borde jag ha detta här?
-		free(removeNode);
-		list->size--;
-	}
+	assert(removeNode != NULL);
+	list->first = removeNode->next;
+	//printf("list: remove_first: removeNode->data\n");
+	remove_memory(removeNode->data); // Borde jag ha detta här?
+	//printf("list: remove_first: removeNode\n");
+	free(removeNode);
+	removeNode = NULL;
+	list->size--;
 }
 
 /*
@@ -75,11 +70,8 @@ void remove_first(List *list)
  */
 Memory *get_first(List *list)
 {
-	if (list->first != NULL)
-	{
-		return list->first->data;
-	}
-	return NULL;
+	assert(list->first != NULL);
+	return list->first->data;
 }
 
 /*
@@ -89,7 +81,10 @@ Memory *get_first(List *list)
  */
 void remove_list(List *list)
 {
+	assert(list != NULL);
 	while (list->size > 0)
 		remove_first(list);
+	//printf("list: remove_list: list\n");
 	free(list);
+	list = NULL;
 }

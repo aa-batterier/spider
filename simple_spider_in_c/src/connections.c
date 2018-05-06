@@ -20,7 +20,8 @@ void get_web_page(const char *address,Memory *memory)
 		curl_easy_setopt(curl,CURLOPT_SSL_VERIFYHOST,0L);
 #endif
 		curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_web_page);
-		curl_easy_setopt(curl,CURLOPT_WRITEDATA,(void*)memory);
+		//curl_easy_setopt(curl,CURLOPT_WRITEDATA,(void*)memory);
+		curl_easy_setopt(curl,CURLOPT_WRITEDATA,memory);
 		curl_easy_setopt(curl,CURLOPT_TIMEOUT,15000);
 		curl_easy_setopt(curl,CURLOPT_USERAGENT,"libcurl-agent/1.0");
 		if ((res = curl_easy_perform(curl)) != CURLE_OK)

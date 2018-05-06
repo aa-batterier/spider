@@ -5,15 +5,11 @@
  * Usage: A callback function which writes the website to a dynamic buffer.
  * --------------------------------------------------------------------------
  */
-size_t write_web_page(void *content,size_t size,size_t nmemb,void *userp)
+size_t write_web_page(char *content,size_t size,size_t nmemb,Memory *userp)
 {
 	size_t realsize = size*nmemb;
 	Memory *memory = (Memory*)userp;
-	if ((memory->text = (char*)realloc(memory->text,memory->size+realsize+1)) == NULL)
-	{
-		fprintf(stderr,"not enough memory (realloc returned NULL)\n");
-		return 0;
-	}
+	memory->text = (char*)realloc(memory->text,memory->size+realsize+1);
 	memcpy(&(memory->text[memory->size]),content,realsize);
 	memory->size += realsize;
 	memory->text[memory->size] = '\0';
@@ -30,44 +26,34 @@ void extract_web_addresses(char *content,const char *addOnAddr,List *list) //,FI
 	char *prev = content,*correct = content;
 	for (;;)
 	{
-		Memory *address;
-		if ((address = create_memory()) == NULL)
+		Memory *address = create_memory();
+		if ((prev = strstr(correct,"href=")) == NULL)
 		{
-			fprintf(stderr,"create_memory failed\n");
+			break;
 		}
-		else
+		if ((prev = strtok(prev,"\'\"")) == NULL)
 		{
-			if ((prev = strstr(correct,"href=")) == NULL)
-			{
-				break;
-			}
-			if ((prev = strtok(prev,"\'\"")) == NULL)
-			{
-				break;
-			}
-			if ((correct = strtok(NULL,"\'\"")) == NULL)
-			{
-				break;
-			}
-			int i = 0;
-			for (; *correct != '\0'; correct++,i++)
-			{
-				if (i == address->size)
-				{
-					address->size = address->size*2+1;
-					if ((address->text = (char*)realloc(address->text,address->size)) == NULL)
-					{
-						fprintf(stderr,"not enough space, realloc returned NULL.\n");
-					}
-				}
-				address->text[i] = *correct;
-			}
-			address->text[i] = '\0';
-			//fprintf(out,"%s\n",address->text);
-			add_address(addOnAddr,address);
-			add_last(list,address);
-			correct++;
+			break;
 		}
+		if ((correct = strtok(NULL,"\'\"")) == NULL)
+		{
+			break;
+		}
+		int i = 0;
+		for (; *correct != '\0'; correct++,i++)
+		{
+			if (i == address->size)
+			{
+				address->size = address->size*2+1;
+				address->text = (char*)realloc(address->text,address->size);
+			}
+			address->text[i] = *correct;
+		}
+		address->text[i] = '\0';
+		//fprintf(out,"%s\n",address->text);
+		add_address(addOnAddr,address);
+		add_last(list,address);
+		correct++;
 	}
 }
 
@@ -79,11 +65,7 @@ void extract_web_addresses(char *content,const char *addOnAddr,List *list) //,FI
 void add_address(const char *addOnAddr,Memory *address)
 {
 	int addrLen = strlen(addOnAddr),last = addrLen-1;
-	char *cleanAddr;
-	if ((cleanAddr = (char*)malloc(addrLen)) == NULL)
-	{
-		fprintf(stderr,"no more space, malloc returned NULL\n");
-	}
+	char *cleanAddr = (char*)malloc(addrLen);
 	strncpy(cleanAddr,addOnAddr,addrLen);
 	cleanAddr[addrLen] = '\0';
 	if (cleanAddr[last] == '/')
@@ -95,13 +77,14 @@ void add_address(const char *addOnAddr,Memory *address)
 	{
 		char *tmp = address->text;
 		address->size += addrLen;
-		if ((address->text = (char*)malloc(address->size)) == NULL)
-		{
-			fprintf(stderr,"no more space, malloc returned NULL\n");
-		}
+		address->text = (char*)malloc(address->size);
 		address->text[0] = '\0';
 		strcat(strcat(address->text,cleanAddr),tmp);
+		//printf("text: add_address: tmp\n");
 		free(tmp);
+		tmp = NULL;
 	}
+	//printf("text: add_address: cleanAddr\n");
 	free(cleanAddr);
+	cleanAddr = NULL;
 }

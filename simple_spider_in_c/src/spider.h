@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
+#include <assert.h>
 
 typedef struct
 {
@@ -37,10 +38,10 @@ void remove_list(List *list);
 
 /* memory.c */
 Memory *create_memory(void);
-void free_memory(Memory *removeMemory);
+void remove_memory(Memory *removeMemory);
 
 /* text.c */
-size_t write_web_page(void *content,size_t size,size_t nmemb,void *userp);
+size_t write_web_page(char *content,size_t size,size_t nmemb,Memory *userp);
 void extract_web_addresses(char *content,const char *addOnAddr,List *list); //,FILE *out);
 void add_address(const char *addOnAddr,Memory *address);
 
