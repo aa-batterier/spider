@@ -17,11 +17,15 @@ int main(int argc,char *argv[])
 	spider.get_web_page(argv[1]);
 	while (!spider.is_empty())
 	{
-		string address = spider.get_first();
+		string addressString = spider.get_first();
 		spider.remove_first();
-		outFile << address << endl;
+		char *addressChar = new char[addressString.size()+1];
+		copy(addressString.begin(),addressString.end(),addressChar);
+		addressChar[addressString.size()] = '\0';
+		outFile << addressString << endl;
 		cout << "Number of elements in list:" << spider.size() << endl;
-		spider.get_web_page(address);
+		spider.get_web_page(addressChar);
+		delete [] addressChar;
 	}
 	outFile.close();
 	//exit(0);

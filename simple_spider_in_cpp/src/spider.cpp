@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Spider::get_web_page(const string address)
+void Spider::get_web_page(const char *address)
 {
 	CURLcode res;
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -26,24 +26,31 @@ void Spider::get_web_page(const string address)
 		}
 		else
 		{
-			printf("Bytes retrieved.\n");
+		//	cout << webContent << endl;
 		}
 		curl_easy_cleanup(curl);
 	}
 	curl_global_cleanup();
-	extract_web_addresses(address);
+	string addressString(address);
+	extract_web_addresses(addressString);
 }
 
-static size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,string stream)
+size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,void *stream)
 {
-	string temp(static_cast<const char*>(ptr), size * nmemb);
-	webContent = temp;
+	/*string temp(static_cast<const char*>(ptr), size * nmemb);
+	webContent = temp;*/
+	string &buffer = *(string*)stream;
+	buffer.assign((char*)ptr,size*nmemb);
+	cout << buffer << endl;
 	return size*nmemb;
 }
 
 void Spider::extract_web_addresses(const string addOnAddr)
 {
-	char *prev = webContent,*correct = webContent;
+	char *prev = new char[webContent.size()+1];
+	copy(webContent.begin(),webContent.end(),prev);
+	prev[webContent.size()] = '\0';
+	char *correct = prev;
 	for (;;)
 	{
 		string address;
@@ -62,28 +69,33 @@ void Spider::extract_web_addresses(const string addOnAddr)
 		int i = 0;
 		for (; *correct != '\0'; correct++,i++)
 		{
-			address.append(*correct);
+			//address.append(*correct);
+			address += *correct;
 		}
 		add_address(addOnAddr,address);
 		add_last(address);
 		correct++;
 	}
+	delete [] prev;
+	correct = NULL;
 }
 
 void Spider::add_address(const string addOnAddr, string &address)
 {
-	int addrLen = strlen(addOnAddr),last = addrLen-1;
-	string cleanAddr;
-	strncpy(cleanAddr,addOnAddr,addrLen);
+	int addrLen = addOnAddr.size(),last = addrLen-1;
+	char *cleanAddr = new char[addrLen+1];
+	copy(addOnAddr.begin(),addOnAddr.end(),cleanAddr);
 	cleanAddr[addrLen] = '\0';
 	if (cleanAddr[last] == '/')
 	{
 		cleanAddr[last] = '\0';
 		addrLen--;
 	}
-	if (strncmp("http",address,4) != 0)
+	if (address.compare(0,4,"http") != 0)
 	{
 		string tmp = address;
-		strcat(strcpy(address,cleanAddr),tmp);
+		address.assign(cleanAddr);
+		address += tmp;
 	}
+	delete [] cleanAddr;
 }
