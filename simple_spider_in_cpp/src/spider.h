@@ -15,9 +15,10 @@ class Spider
 		bool is_empty(void)const{return addresses.empty();}
 		int size(void)const{return addresses.size();}
 		// Connections functions:
-		void get_web_page(const char *address);
+		void grab_web(const char *address);
 	private:
 		// Connections functions:
+		static string get_web_page(const char *address);
 		static size_t write_web_page(void *ptr,size_t size,size_t nmemb,void *stream);
 		void extract_web_addresses(const string addOnAddr);
 		void add_address(const string addOnAddr,string &address);

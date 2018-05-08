@@ -14,7 +14,7 @@ int main(int argc,char *argv[])
 	Spider spider;
 	ofstream outFile;
 	outFile.open(argv[2]);
-	spider.get_web_page(argv[1]);
+	spider.grab_web(argv[1]);
 	while (!spider.is_empty())
 	{
 		string addressString = spider.get_first();
@@ -24,7 +24,7 @@ int main(int argc,char *argv[])
 		addressChar[addressString.size()] = '\0';
 		outFile << addressString << endl;
 		cout << "Number of elements in list:" << spider.size() << endl;
-		spider.get_web_page(addressChar);
+		spider.grab_web(addressChar);
 		delete [] addressChar;
 	}
 	outFile.close();

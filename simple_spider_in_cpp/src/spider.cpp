@@ -2,8 +2,17 @@
 
 using namespace std;
 
-void Spider::get_web_page(const char *address)
+void Spider::grab_web(const char *address)
 {
+	webContent = get_web_page(address);
+	//cout << webContent << "\n" << webContent.size() << endl;
+	string addressString(address);
+	extract_web_addresses(addressString);
+}
+
+string Spider::get_web_page(const char *address)
+{
+	string content;
 	CURLcode res;
 	curl_global_init(CURL_GLOBAL_ALL);
 	CURL *curl = curl_easy_init();
@@ -17,31 +26,27 @@ void Spider::get_web_page(const char *address)
 		curl_easy_setopt(curl,CURLOPT_SSL_VERIFYHOST,0L);
 #endif
 		curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write_web_page);
-		curl_easy_setopt(curl,CURLOPT_WRITEDATA,&webContent);
+		curl_easy_setopt(curl,CURLOPT_WRITEDATA,&content);
 		curl_easy_setopt(curl,CURLOPT_TIMEOUT,15000);
 		curl_easy_setopt(curl,CURLOPT_USERAGENT,"libcurl-agent/1.0");
 		if ((res = curl_easy_perform(curl)) != CURLE_OK)
 		{
-			fprintf(stderr,"curl_easy_perform() failed: %s\n",curl_easy_strerror(res));
+			cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
 		}
 		else
 		{
-		//	cout << webContent << endl;
+			cout << content.size() << " bytes retrieved." << endl;
 		}
 		curl_easy_cleanup(curl);
 	}
 	curl_global_cleanup();
-	string addressString(address);
-	extract_web_addresses(addressString);
+	return content;
 }
 
 size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,void *stream)
 {
-	/*string temp(static_cast<const char*>(ptr), size * nmemb);
-	webContent = temp;*/
 	string &buffer = *(string*)stream;
-	buffer.assign((char*)ptr,size*nmemb);
-	cout << buffer << endl;
+	buffer.append((char*)ptr,size*nmemb);
 	return size*nmemb;
 }
 
@@ -69,7 +74,6 @@ void Spider::extract_web_addresses(const string addOnAddr)
 		int i = 0;
 		for (; *correct != '\0'; correct++,i++)
 		{
-			//address.append(*correct);
 			address += *correct;
 		}
 		add_address(addOnAddr,address);
