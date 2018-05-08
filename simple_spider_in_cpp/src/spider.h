@@ -13,8 +13,8 @@
  *  Provides tools for the spider program.
  */
 
-#ifndef _ring_h
-#define _ring_h
+#ifndef _spider_h
+#define _spider_h
 
 /* Include files necessary for the headerfile. */
 #include <iostream>
