@@ -1,15 +1,44 @@
+/*
+ * Information about sourcedevelopment.
+ * -------------------------------------
+ *  Initial creator: Andreas Johansson.
+ *  Date created: 06-05-2018
+ *  Last updated by: Andreas Johansson.
+ *  Date for update: 08-05-2018
+ */
+
+/*
+ * File: spider.cpp
+ * -----------------
+ *  Provides the functions for the spider program.
+ */
+
+/* Include files necessary for the headerfile. */
 #include "spider.h"
 
+/* The needed namespaceses. */
 using namespace std;
 
+/*
+ * Function: grab_web
+ * Usage: Grabs the websites.
+ * ---------------------------
+ */
 void Spider::grab_web(const char *address)
 {
 	webContent = get_web_page(address);
-	//cout << webContent << "\n" << webContent.size() << endl;
-	string addressString(address);
-	extract_web_addresses(addressString);
+	if (webContent.size() > 1)
+	{
+		string addressString(address);
+		extract_web_addresses(addressString);
+	}
 }
 
+/*
+ * Function: get_web_page
+ * Usage: Gets the web page.
+ * --------------------------
+ */
 string Spider::get_web_page(const char *address)
 {
 	string content;
@@ -30,19 +59,20 @@ string Spider::get_web_page(const char *address)
 		curl_easy_setopt(curl,CURLOPT_TIMEOUT,15000);
 		curl_easy_setopt(curl,CURLOPT_USERAGENT,"libcurl-agent/1.0");
 		if ((res = curl_easy_perform(curl)) != CURLE_OK)
-		{
 			cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
-		}
 		else
-		{
 			cout << content.size() << " bytes retrieved." << endl;
-		}
 		curl_easy_cleanup(curl);
 	}
 	curl_global_cleanup();
 	return content;
 }
 
+/*
+ * Function: write_web_page
+ * Usage: Writes the web page content.
+ * ------------------------------------
+ */
 size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,void *stream)
 {
 	string &buffer = *(string*)stream;
@@ -50,6 +80,11 @@ size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,void *stream)
 	return size*nmemb;
 }
 
+/*
+ * Function: extract_web_addresses
+ * Usage: Extract the web addresses from the web page.
+ * ----------------------------------------------------
+ */
 void Spider::extract_web_addresses(const string addOnAddr)
 {
 	char *prev = new char[webContent.size()+1];
@@ -60,22 +95,14 @@ void Spider::extract_web_addresses(const string addOnAddr)
 	{
 		string address;
 		if ((prev = strstr(correct,"href=")) == NULL)
-		{
 			break;
-		}
 		if ((prev = strtok(prev,"\'\"")) == NULL)
-		{
 			break;
-		}
 		if ((correct = strtok(NULL,"\'\"")) == NULL)
-		{
 			break;
-		}
 		int i = 0;
 		for (; *correct != '\0'; correct++,i++)
-		{
 			address += *correct;
-		}
 		add_address(addOnAddr,address);
 		add_last(address);
 		correct++;
@@ -84,6 +111,11 @@ void Spider::extract_web_addresses(const string addOnAddr)
 	correct = NULL;
 }
 
+/*
+ * Function: add_address
+ * Usage: Adds an address.
+ * ------------------------
+ */
 void Spider::add_address(const string addOnAddr, string &address)
 {
 	int addrLen = addOnAddr.size(),last = addrLen-1;
