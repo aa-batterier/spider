@@ -14,7 +14,7 @@
  */
 
 /* Include files necessary for the headerfile. */
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 #include "spider.h"
 
