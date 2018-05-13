@@ -22,6 +22,8 @@
 #include <deque>
 #include <curl/curl.h>
 
+#define DEFAULT_ADDRESS "https://web.archive.org/web/20080916124519/http://www.dmoz.org/"
+
 /* The needed namespaceses. */
 using namespace std;
 
@@ -38,8 +40,6 @@ class Spider
 	public:
 
 		/* Function prototypes. */
-
-		/* spider.cpp */
 
 		/*
 		 * Function: get_first

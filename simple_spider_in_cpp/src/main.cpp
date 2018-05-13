@@ -30,24 +30,23 @@ int main(int argc,char *argv[])
 {
 	if (argc != 3)
 	{
-		cerr << "usage: " << argv[0] << " <hostname> <filename>" << endl;
+		cerr << "usage: " << argv[0] << " <hostname or default> <filename>" << endl;
 		exit(1);
 	}
 	Spider spider;
+	if (strncmp(argv[1],"default",7) == 0)
+		spider.grab_web(DEFAULT_ADDRESS);
+	else
+		spider.grab_web(argv[1]);
 	ofstream outFile;
 	outFile.open(argv[2]);
-	spider.grab_web(argv[1]);
 	while (!spider.is_empty())
 	{
-		string addressString = spider.get_first();
+		string address = spider.get_first();
 		spider.remove_first();
-		char *addressChar = new char[addressString.size()+1];
-		copy(addressString.begin(),addressString.end(),addressChar);
-		addressChar[addressString.size()] = '\0';
-		outFile << addressString << endl;
+		outFile << address << endl;
 		cout << "Number of elements in list: " << spider.size() << endl;
-		spider.grab_web(addressChar);
-		delete [] addressChar;
+		spider.grab_web(address.c_str());
 	}
 	outFile.close();
 	exit(0);
