@@ -24,14 +24,11 @@ using namespace std;
  * Usage: Grabs the websites.
  * ---------------------------
  */
-void Spider::grab_web(const char *address)
+void Spider::grab_web(const string address)
 {
-	webContent = get_web_page(address);
+	webContent = get_web_page(address.c_str());
 	if (webContent.size() > 1)
-	{
-		string addressString(address);
-		extract_web_addresses(addressString);
-	}
+		extract_web_addresses(address);
 }
 
 /*
@@ -87,10 +84,7 @@ size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,void *stream)
  */
 void Spider::extract_web_addresses(const string addOnAddr)
 {
-	char *prev = new char[webContent.size()+1];
-	copy(webContent.begin(),webContent.end(),prev);
-	prev[webContent.size()] = '\0';
-	char *correct = prev;
+	char *prev = (char*)webContent.c_str(),*correct = prev;
 	for (;;)
 	{
 		string address;
@@ -107,8 +101,6 @@ void Spider::extract_web_addresses(const string addOnAddr)
 		add_last(address);
 		correct++;
 	}
-	delete [] prev;
-	correct = NULL;
 }
 
 /*
@@ -116,22 +108,10 @@ void Spider::extract_web_addresses(const string addOnAddr)
  * Usage: Adds an address.
  * ------------------------
  */
-void Spider::add_address(const string addOnAddr, string &address)
+void Spider::add_address(string addOnAddr, string &address)
 {
-	int addrLen = addOnAddr.size(),last = addrLen-1;
-	char *cleanAddr = new char[addrLen+1];
-	copy(addOnAddr.begin(),addOnAddr.end(),cleanAddr);
-	cleanAddr[addrLen] = '\0';
-	if (cleanAddr[last] == '/')
-	{
-		cleanAddr[last] = '\0';
-		addrLen--;
-	}
+	if (addOnAddr[addOnAddr.size()-1] == '/')
+		addOnAddr[addOnAddr.size()-1] = '\0';
 	if (address.compare(0,4,"http") != 0)
-	{
-		string tmp = address;
-		address.assign(cleanAddr);
-		address += tmp;
-	}
-	delete [] cleanAddr;
+		address = addOnAddr + address;
 }

@@ -89,7 +89,7 @@ class Spider
 		 * ---------------------------
 		 *  grab_web grabs the website content and sort out the addresses to the queue/fifo.
 		 */
-		void grab_web(const char *address);
+		void grab_web(const string address);
 
 	private:
 
@@ -127,7 +127,7 @@ class Spider
 		 *  add_address adds an address to those addresses who doens't have a fully webaddress,
 		 *  (missing "https:://www..." in the begining).
 		 */
-		void add_address(const string addOnAddr,string &address);
+		void add_address(string addOnAddr,string &address);
 
 		/* Varibles. */
 
