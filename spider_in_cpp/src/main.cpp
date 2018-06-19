@@ -15,11 +15,7 @@
 
 /* Include files necessary for the headerfile. */
 #include <cstdlib>
-#include <fstream>
 #include "spider.h"
-
-/* The needed namespaceses. */
-using namespace std;
 
 /*
  * Function: main
@@ -30,24 +26,27 @@ int main(int argc,char *argv[])
 {
 	if (argc != 3)
 	{
-		cerr << "usage: " << argv[0] << " <hostname or default> <filename>" << endl;
+		std::cerr << "usage: " << argv[0] << " <hostname or default> <filename>" << std::endl;
 		exit(1);
 	}
 	Spider spider;
 	if (strncmp(argv[1],"default",7) == 0)
+	{
 		spider.grab_web(DEFAULT_ADDRESS);
+		spider.printToFile(DEFAULT_ADDRESS);
+	}
 	else
+	{
 		spider.grab_web(argv[1]);
-	ofstream outFile;
-	outFile.open(argv[2]);
+		spider.printToFile(argv[1]);
+	}
 	while (!spider.is_empty())
 	{
-		string address = spider.get_first();
+		std::string address = spider.get_first();
 		spider.remove_first();
-		outFile << address << endl;
-		cout << "Number of elements in list: " << spider.size() << endl;
-		spider.grab_web(address.c_str());
+		std::cout << "Number of elements in list: " << spider.size() << std::endl;
+		spider.grab_web(address);
+		spider.printToFile(address);
 	}
-	outFile.close();
 	exit(0);
 }

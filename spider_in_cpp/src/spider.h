@@ -18,14 +18,13 @@
 
 /* Include files necessary for the headerfile. */
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include <deque>
 #include <curl/curl.h>
+#include "hash.h"
 
 #define DEFAULT_ADDRESS "https://web.archive.org/web/20080916124519/http://www.dmoz.org/"
-
-/* The needed namespaceses. */
-using namespace std;
 
 /* Classdefinitions. */
 
@@ -47,7 +46,7 @@ class Spider
 		 * ---------------------------------
 		 *  get_first returns the first string from the queue/fifo.
 		 */
-		string get_first(void)const{return addresses.front();}
+		const std::string get_first(void) const {return _addresses.front();}
 
 		/*
 		 * Function: add_last
@@ -55,7 +54,7 @@ class Spider
 		 * ---------------------------
 		 *  add_last adds a string last to the queue/fifo.
 		 */
-		void add_last(string address){addresses.push_back(address);}
+		void add_last(const std::string address) {_addresses.push_back(address);}
 
 		/*
 		 * Function: remove_first
@@ -63,7 +62,7 @@ class Spider
 		 * ---------------------------------
 		 *  remove_first removes the first string from the queue/fifo.
 		 */
-		void remove_first(void){addresses.pop_front();}
+		void remove_first(void) {_addresses.pop_front();}
 
 		/*
 		 * Function: is_empty
@@ -72,7 +71,7 @@ class Spider
 		 *  is_empty returns true if the queue/fifo is empty, if the
 		 *  queue/fifo is not empty is_empty returns false.
 		 */
-		bool is_empty(void)const{return addresses.empty();}
+		const bool is_empty(void) const {return _addresses.empty();}
 
 		/*
 		 * Function: size
@@ -81,7 +80,7 @@ class Spider
 		 *  size returns the size of the queue/fifo (how many elements
 		 *  there are in the queue/fifo).
 		 */
-		int size(void)const{return addresses.size();}
+		const int size(void) const {return _addresses.size();}
 
 		/*
 		 * Function: grab_web
@@ -89,8 +88,15 @@ class Spider
 		 * ---------------------------
 		 *  grab_web grabs the website content and sort out the addresses to the queue/fifo.
 		 */
-		void grab_web(const string address);
+		void grab_web(const std::string address);
 
+		/*
+		 * Function: printToFile
+		 * Usage: Prints to file.
+		 * -----------------------
+		 * Prints the web address and web content to the specified file/files.
+		 */
+		const bool printToFile(const std::string address,const std::string addressFile = "webAddresses.txt",const std::string contentFile = "webContent.txt");
 	private:
 
 		/*
@@ -100,7 +106,7 @@ class Spider
 		 *  get_web_page downloads the entire web page and returns it in a string.
 		 *  If it fails it will return an empty string.
 		 */
-		static string get_web_page(const char *address);
+		static const std::string get_web_page(const char *address);
 
 		/*
 		 * Function: write_web_page
@@ -118,7 +124,7 @@ class Spider
 		 *  extract_web_addresses extract all the web addresses from the website and puts
 		 *  them into the queue/fifo.
 		 */
-		void extract_web_addresses(const string addOnAddr);
+		void extract_web_addresses(const std::string addOnAddr);
 
 		/*
 		 * Function: add_address
@@ -127,23 +133,30 @@ class Spider
 		 *  add_address adds an address to those addresses who doens't have a fully webaddress,
 		 *  (missing "https:://www..." in the begining).
 		 */
-		void add_address(string addOnAddr,string &address);
+		void add_address(std::string addOnAddr,std::string &address);
 
 		/* Varibles. */
 
 		/*
-		 * Varible: webContent.
+		 * Varible: _webContent.
 		 * ---------------------
 		 *  In the string varible webContent I store the content of the website.
 		 */
-		string webContent;
+		std::string _webContent;
 
 		/*
-		 * Varible: addresses.
+		 * Varible: _addresses.
 		 * --------------------
 		 *  In the dqueue varible addresses I store all the addresses from the websites.
 		 */
-		deque<string> addresses;
+		std::deque<std::string> _addresses;
+		
+		/*
+		 * Varible: _webHash.
+		 * ------------------
+		 *  Stores the web addresses and the web content.
+		 */
+		Hash _webHash;
 };
 
 #endif

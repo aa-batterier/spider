@@ -16,19 +16,38 @@
 /* Include files necessary for the headerfile. */
 #include "spider.h"
 
-/* The needed namespaceses. */
-using namespace std;
-
 /*
  * Function: grab_web
  * Usage: Grabs the websites.
  * ---------------------------
  */
-void Spider::grab_web(const string address)
+void Spider::grab_web(const std::string address)
 {
-	webContent = get_web_page(address.c_str());
-	if (webContent.size() > 1)
-		extract_web_addresses(address);
+	_webContent = get_web_page(address.c_str());
+	if (!_webHash.contains(address,_webContent))
+	{
+		_webHash.add(address,_webContent);
+		if (_webContent.size() > 1)
+			extract_web_addresses(address);
+	}
+}
+
+/*
+ * Function: printToFile
+ * Usage: Prints to file.
+ * -----------------------
+ * Prints the web address and web content to the specified file/files.
+ */
+const bool Spider::printToFile(const std::string address,const std::string addressFile,const std::string contentFile)
+{
+	std::ofstream addressOut(addressFile),contentOut(contentFile);
+	if (addressOut.fail() || contentOut.fail())
+		return false;
+	addressOut << _webHash.getKey(address) << std::endl;
+	addressOut.close();
+	contentOut << _webHash.getValue(address) << std::endl;
+	contentOut.close();
+	return true;
 }
 
 /*
@@ -36,9 +55,9 @@ void Spider::grab_web(const string address)
  * Usage: Gets the web page.
  * --------------------------
  */
-string Spider::get_web_page(const char *address)
+const std::string Spider::get_web_page(const char *address)
 {
-	string content;
+	std::string content;
 	CURLcode res;
 	curl_global_init(CURL_GLOBAL_ALL);
 	CURL *curl = curl_easy_init();
@@ -56,9 +75,9 @@ string Spider::get_web_page(const char *address)
 		curl_easy_setopt(curl,CURLOPT_TIMEOUT,15000);
 		curl_easy_setopt(curl,CURLOPT_USERAGENT,"libcurl-agent/1.0");
 		if ((res = curl_easy_perform(curl)) != CURLE_OK)
-			cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
+			std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
 		else
-			cout << content.size() << " bytes retrieved." << endl;
+			std::cout << content.size() << " bytes retrieved." << std::endl;
 		curl_easy_cleanup(curl);
 	}
 	curl_global_cleanup();
@@ -72,7 +91,7 @@ string Spider::get_web_page(const char *address)
  */
 size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,void *stream)
 {
-	string &buffer = *(string*)stream;
+	std::string &buffer = *(std::string*)stream;
 	buffer.append((char*)ptr,size*nmemb);
 	return size*nmemb;
 }
@@ -82,12 +101,12 @@ size_t Spider::write_web_page(void *ptr,size_t size,size_t nmemb,void *stream)
  * Usage: Extract the web addresses from the web page.
  * ----------------------------------------------------
  */
-void Spider::extract_web_addresses(const string addOnAddr)
+void Spider::extract_web_addresses(const std::string addOnAddr)
 {
-	char *prev = (char*)webContent.c_str(),*correct = prev;
+	char *prev = (char*)_webContent.c_str(),*correct = prev;
 	for (;;)
 	{
-		string address;
+		std::string address;
 		if ((prev = strstr(correct,"href=")) == NULL)
 			break;
 		if ((prev = strtok(prev,"\'\"")) == NULL)
@@ -108,7 +127,7 @@ void Spider::extract_web_addresses(const string addOnAddr)
  * Usage: Adds an address.
  * ------------------------
  */
-void Spider::add_address(string addOnAddr, string &address)
+void Spider::add_address(std::string addOnAddr, std::string &address)
 {
 	if (addOnAddr[addOnAddr.size()-1] == '/')
 		addOnAddr[addOnAddr.size()-1] = '\0';

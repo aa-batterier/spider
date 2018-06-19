@@ -1,13 +1,13 @@
 #include "hash.h"
 
-Hash::Hash(const Hash& copy)
+Hash::Hash(const Hash& copy) : _capacity(copy._capacity),_size(copy._size),_hashTable(allocHash(_capacity))
 {
 	for (unsigned int i = 0; i < _capacity; i++)
 		if (copy._hashTable[i]._status == BUSY || copy._hashTable[i]._status == DELETED)
 			copyElement(copy._hashTable[i],_capacity);
 }
 
-Hash::Hash(Hash&& move)
+Hash::Hash(Hash&& move) : _capacity(move._capacity),_size(move._size),_hashTable(move._hashTable)
 {
 	move._hashTable = nullptr;
 	move._capacity = move._size = 0;
@@ -78,23 +78,25 @@ const Hash Hash::operator -(const Hash &right) const
 
 void Hash::add(const std::string& key,const std::string& value)
 {
-	assert(!contains(key));
-	if (_size+1 >= _capacity)
+	if (!contains(key,value))
 	{
-		unsigned int newCapacity = generatePrime(_capacity);
-		HashCell *tmp = _hashTable;
-		_hashTable = allocHash(newCapacity);
-		if (tmp != nullptr)
+		if (_size+1 >= _capacity)
 		{
-			for (unsigned int i = 0; i < _capacity; i++)
-				if (tmp[i]._status == BUSY || tmp[i]._status == DELETED)
-					copyElement(tmp[i],newCapacity);
-			delete [] tmp;
+			unsigned int newCapacity = generatePrime(_capacity);
+			HashCell *tmp = _hashTable;
+			_hashTable = allocHash(newCapacity);
+			if (tmp != nullptr)
+			{
+				for (unsigned int i = 0; i < _capacity; i++)
+					if (tmp[i]._status == BUSY || tmp[i]._status == DELETED)
+						copyElement(tmp[i],newCapacity);
+				delete [] tmp;
+			}
+			_capacity = newCapacity;
 		}
-		_capacity = newCapacity;
+		copyElement((HashCell){key,value,generateHash(key),generateHash(value),BUSY},_capacity);
+		_size++;
 	}
-	copyElement((HashCell){key,value,generateHash(key),BUSY},_capacity);
-	_size++;
 }
 
 void Hash::remove(const std::string& key)
@@ -140,6 +142,16 @@ const int Hash::indexHash(const std::string& key) const
 	unsigned int hash = generateHash(key),row = HASH(hash);
 	for (; _hashTable[row]._status != FREE; row = HASH(row+1))
 		if (_hashTable[row]._hash == hash) // && _hashTable[row]._status != DELETED)
+			return row;
+	return -1;
+}
+
+const int Hash::indexHash(const std::string& key,const std::string value) const
+{
+	unsigned int hash = generateHash(key),row = HASH(hash);
+	unsigned long long int valueHash = generateHash(value);
+	for (; _hashTable[row]._status != FREE; row = HASH(row+1))
+		if (_hashTable[row]._hash == hash || _hashTable[row]._valueHash == valueHash) // && _hashTable[row]._status != DELETED)
 			return row;
 	return -1;
 }
