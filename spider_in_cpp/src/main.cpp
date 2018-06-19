@@ -4,7 +4,7 @@
  *  Initial creator: Andreas Johansson.
  *  Date created: 06-05-2018
  *  Last updated by: Andreas Johansson.
- *  Date for update: 08-05-2018
+ *  Date for update: 19-06-2018
  */
 
 /*
@@ -24,22 +24,18 @@
  */
 int main(int argc,char *argv[])
 {
-	if (argc != 3)
+	if (argc != 4)
 	{
-		std::cerr << "usage: " << argv[0] << " <hostname or default> <filename>" << std::endl;
+		std::cerr << "usage: " << argv[0] << " <hostname or default> <filename for addresses or default> <filename for web content or default>" << std::endl;
 		exit(1);
 	}
 	Spider spider;
-	if (strncmp(argv[1],"default",7) == 0)
-	{
-		spider.grab_web(DEFAULT_ADDRESS);
-		spider.printToFile(DEFAULT_ADDRESS);
-	}
-	else
-	{
-		spider.grab_web(argv[1]);
-		spider.printToFile(argv[1]);
-	}
+	std::string startAddress,addressFile,contentFile;
+	strncmp(argv[1],"default",7) == 0 ? startAddress = DEFAULT_ADDRESS : startAddress = argv[1];
+	strncmp(argv[2],"default",7) == 0 ? addressFile = DEFAULT_ADDRESS_FILE : addressFile = argv[2];
+	strncmp(argv[3],"default",7) == 0 ? contentFile = DEFAULT_CONTENT_FILE : contentFile = argv[2];
+	spider.grab_web(startAddress);
+	spider.printToFile(startAddress,addressFile,contentFile);
 	while (!spider.is_empty())
 	{
 		std::string address = spider.get_first();

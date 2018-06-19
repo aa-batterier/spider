@@ -4,7 +4,7 @@
  *  Initial creator: Andreas Johansson.
  *  Date created: 06-05-2018
  *  Last updated by: Andreas Johansson.
- *  Date for update: 08-05-2018
+ *  Date for update: 19-06-2018
  */
 
 /*
@@ -24,7 +24,34 @@
 #include <curl/curl.h>
 #include "hash.h"
 
+/* Constants. */
+
+/*
+ * Constant: DEFAULT_ADDRESS
+ * --------------------------
+ *  Defines the default start addess
+ *  which the program use if no other
+ *  address is defined.
+ */
 #define DEFAULT_ADDRESS "https://web.archive.org/web/20080916124519/http://www.dmoz.org/"
+
+/*
+ * Constant: DEFAULT_ADDRESS_FILE
+ * -------------------------------
+ *  Define the default name on the file
+ *  which will contain all the web addresses
+ *  if no other file name is defined.
+ */
+#define DEFAULT_ADDRESS_FILE "webAddresses.txt"
+
+/*
+ * Constant: DEFAULT_CONTENT_FILE
+ * -------------------------------
+ *  Define the default name on the file
+ *  which will contain all the web content
+ *  if no other file name is defined.
+ */
+#define DEFAULT_CONTENT_FILE "webContent.txt"
 
 /* Classdefinitions. */
 
@@ -88,7 +115,7 @@ class Spider
 		 * ---------------------------
 		 *  grab_web grabs the website content and sort out the addresses to the queue/fifo.
 		 */
-		void grab_web(const std::string address);
+		void grab_web(const std::string address = "https://web.archive.org/web/20080916124519/http://www.dmoz.org/");
 
 		/*
 		 * Function: printToFile
@@ -97,6 +124,7 @@ class Spider
 		 * Prints the web address and web content to the specified file/files.
 		 */
 		const bool printToFile(const std::string address,const std::string addressFile = "webAddresses.txt",const std::string contentFile = "webContent.txt");
+
 	private:
 
 		/*

@@ -1,5 +1,26 @@
+/*
+ * Information about sourcedevelopment.
+ * -------------------------------------
+ *  Initial creator: Andreas Johansson.
+ *  Date created: 18-06-2018
+ *  Last updated by: Andreas Johansson.
+ *  Date for update: 19-06-2018
+ */
+
+/*
+ * File: hash.cpp
+ * ----------------
+ *  Provides the code for the tools for the hash used in this program.
+ */
+
+/* Include files necessary for the headerfile. */
 #include "hash.h"
 
+/*
+ * Function: Hash
+ * Usage: The copy constructor.
+ * -----------------------------
+ */
 Hash::Hash(const Hash& copy) : _capacity(copy._capacity),_size(copy._size),_hashTable(allocHash(_capacity))
 {
 	for (unsigned int i = 0; i < _capacity; i++)
@@ -7,12 +28,22 @@ Hash::Hash(const Hash& copy) : _capacity(copy._capacity),_size(copy._size),_hash
 			copyElement(copy._hashTable[i],_capacity);
 }
 
+/*
+ * Function: Hash
+ * Usage: The move constructor.
+ * -----------------------------
+ */
 Hash::Hash(Hash&& move) : _capacity(move._capacity),_size(move._size),_hashTable(move._hashTable)
 {
 	move._hashTable = nullptr;
 	move._capacity = move._size = 0;
 }
 
+/*
+ * Function: =
+ * Usage: The allocation function.
+ * ---------------------------------
+ */
 const Hash& Hash::operator =(const Hash& allocation)
 {
 	_capacity = allocation._capacity;
@@ -31,6 +62,11 @@ const Hash& Hash::operator =(const Hash& allocation)
 	return *this;
 }
 
+/*
+ * Function: =
+ * Usage: The allocation-move function.
+ * -------------------------------------
+ */
 const Hash& Hash::operator =(Hash&& move)
 {
 	_capacity = move._capacity;
@@ -43,6 +79,11 @@ const Hash& Hash::operator =(Hash&& move)
 	return *this;
 }
 
+/*
+ * Function: ==
+ * Usage: Checks if two hashes are equal.
+ * ----------------------------------------
+ */
 const bool Hash::operator ==(const Hash &right) const
 {
 	const Hash *high = nullptr,*low = nullptr;
@@ -53,6 +94,11 @@ const bool Hash::operator ==(const Hash &right) const
 	return true;
 }
 
+/*
+ * Function: +
+ * Usage: Addes two hashes.
+ * -------------------------
+ */
 const Hash Hash::operator +(const Hash *right) const
 {
 	Hash newHash;
@@ -67,6 +113,11 @@ const Hash Hash::operator +(const Hash *right) const
 	return newHash;
 }
 
+/*
+ * Function: -
+ * Usage: Removes the instances that are equal.
+ * ----------------------------------------------
+ */
 const Hash Hash::operator -(const Hash &right) const
 {
 	Hash newHash(*this);
@@ -76,6 +127,11 @@ const Hash Hash::operator -(const Hash &right) const
 	return newHash;
 }
 
+/*
+ * Function: add
+ * Usage: Addes a new instance.
+ * ------------------------------
+ */
 void Hash::add(const std::string& key,const std::string& value)
 {
 	if (!contains(key,value))
@@ -99,12 +155,22 @@ void Hash::add(const std::string& key,const std::string& value)
 	}
 }
 
+/*
+ * Function: remove
+ * Usage: Removes an instance.
+ * ----------------------------
+ */
 void Hash::remove(const std::string& key)
 {
 	assert(contains(key));
 	_hashTable[indexHash(key)]._status = DELETED;
 }
 
+/*
+ * Function: generatePrime
+ * Usage: Generates new prime numbers.
+ * -------------------------------------
+ */
 const unsigned int Hash::generatePrime(const unsigned int oldPrime) const
 {
 	unsigned int newPrime;
@@ -129,6 +195,11 @@ const unsigned int Hash::generatePrime(const unsigned int oldPrime) const
 	return newPrime;
 }
 
+/*
+ * Function: generateHash
+ * Usage: Generate a hash number.
+ * -------------------------------
+ */
 const unsigned int Hash::generateHash(const std::string& str) const
 {
 	int hashValue = 0;
@@ -137,6 +208,11 @@ const unsigned int Hash::generateHash(const std::string& str) const
 	return hashValue;
 }
 
+/*
+ * Function: indexHash
+ * Usage: Finds the index.
+ * ------------------------
+ */
 const int Hash::indexHash(const std::string& key) const
 {
 	unsigned int hash = generateHash(key),row = HASH(hash);
@@ -146,6 +222,11 @@ const int Hash::indexHash(const std::string& key) const
 	return -1;
 }
 
+/*
+ * Function: indexHash
+ * Usage: Finds the index.
+ * ------------------------
+ */
 const int Hash::indexHash(const std::string& key,const std::string value) const
 {
 	unsigned int hash = generateHash(key),row = HASH(hash);
@@ -156,6 +237,11 @@ const int Hash::indexHash(const std::string& key,const std::string value) const
 	return -1;
 }
 
+/*
+ * Function: allocHash
+ * Usage: Allocates a new hash.
+ * ------------------------------
+ */
 HashCell *Hash::allocHash(const unsigned int capacity)
 {
 	HashCell *hashTable = new HashCell[capacity];
@@ -164,6 +250,11 @@ HashCell *Hash::allocHash(const unsigned int capacity)
 	return hashTable;
 }
 
+/*
+ * Function: copyElement
+ * Usage: Copy one element.
+ * ---------------------------
+ */
 void Hash::copyElement(const HashCell element,const unsigned int modulus)
 {
 	unsigned int row = element._hash%modulus;

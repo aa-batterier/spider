@@ -4,7 +4,7 @@
  *  Initial creator: Andreas Johansson.
  *  Date created: 06-05-2018
  *  Last updated by: Andreas Johansson.
- *  Date for update: 08-05-2018
+ *  Date for update: 19-06-2018
  */
 
 /*
@@ -40,7 +40,7 @@ void Spider::grab_web(const std::string address)
  */
 const bool Spider::printToFile(const std::string address,const std::string addressFile,const std::string contentFile)
 {
-	std::ofstream addressOut(addressFile),contentOut(contentFile);
+	std::ofstream addressOut(addressFile,std::ios::app),contentOut(contentFile,std::ios::app);
 	if (addressOut.fail() || contentOut.fail())
 		return false;
 	addressOut << _webHash.getKey(address) << std::endl;
