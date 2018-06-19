@@ -13,8 +13,8 @@
  *  Provides tools for the hash used in this program.
  */
 
-#ifndef _spider_h
-#define _spider_h
+#ifndef _hash_h
+#define _hash_h
 
 /* Include files necessary for the headerfile. */
 #include <cmath>
