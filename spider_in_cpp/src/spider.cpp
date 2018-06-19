@@ -40,13 +40,22 @@ void Spider::grab_web(const std::string address)
  */
 const bool Spider::printToFile(const std::string address,const std::string addressFile,const std::string contentFile)
 {
-	std::ofstream addressOut(addressFile,std::ios::app),contentOut(contentFile,std::ios::app);
-	if (addressOut.fail() || contentOut.fail())
-		return false;
-	addressOut << _webHash.getKey(address) << std::endl;
-	addressOut.close();
-	contentOut << _webHash.getValue(address) << std::endl;
-	contentOut.close();
+	if (_webHash.getKey(address) != "The key doesn't exist.")
+	{
+		std::ofstream addressOut(addressFile,std::ios::app);
+			if (addressOut.fail())
+				return false;
+		addressOut << _webHash.getKey(address) << std::endl;
+		addressOut.close();
+	}
+	if (_webHash.getValue(address) != "The key doesn't exist.")
+	{
+		std::ofstream contentOut(contentFile,std::ios::app);
+		if (contentOut.fail())
+			return false;
+		contentOut << _webHash.getValue(address) << std::endl;
+		contentOut.close();
+	}
 	return true;
 }
 

@@ -35,14 +35,22 @@ int main(int argc,char *argv[])
 	strncmp(argv[2],"default",7) == 0 ? addressFile = DEFAULT_ADDRESS_FILE : addressFile = argv[2];
 	strncmp(argv[3],"default",7) == 0 ? contentFile = DEFAULT_CONTENT_FILE : contentFile = argv[2];
 	spider.grab_web(startAddress);
-	spider.printToFile(startAddress,addressFile,contentFile);
+	if (!spider.printToFile(startAddress,addressFile,contentFile))
+	{
+		std::cerr << "Failed to open file." << std::endl;
+		exit(1);
+	}
 	while (!spider.is_empty())
 	{
 		std::string address = spider.get_first();
 		spider.remove_first();
 		std::cout << "Number of elements in list: " << spider.size() << std::endl;
 		spider.grab_web(address);
-		spider.printToFile(address);
+		if (!spider.printToFile(address,addressFile,contentFile))
+		{
+			std::cerr << "Failed to open file." << std::endl;
+			exit(1);
+		}
 	}
 	exit(0);
 }
