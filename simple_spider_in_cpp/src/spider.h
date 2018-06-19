@@ -22,6 +22,15 @@
 #include <deque>
 #include <curl/curl.h>
 
+/* Constants. */
+
+/*
+ * Constant: DEFAULT_ADDRESS
+ * --------------------------
+ *  Defines the default start addess
+ *  which the program use if no other
+ *  address is defined.
+ */
 #define DEFAULT_ADDRESS "https://web.archive.org/web/20080916124519/http://www.dmoz.org/"
 
 /* The needed namespaceses. */
