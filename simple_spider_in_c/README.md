@@ -1,2 +1,3 @@
 # simple_spider
 A simple spider which just scrap websites with the curl library and picks out the web addresses. The web addresses are put into a queue and writen down to a file. Just run make in the main folder and the program should compile (make sure that you have the folders bin,lib,src in the main folder when you're compiling). The binary file is put into the bin folder run it with two arguments, the website you want to start from and the file which you want to write down the web addresses to.
+There is a memory bug in the program which I have not yet solved, thats why I have written the spider in c++ which work great.
