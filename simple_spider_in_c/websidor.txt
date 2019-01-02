@@ -1,9 +1,0 @@
-https://www.sweclockers.com/css/combine.min.css?v=20180316
-https://www.sweclockers.com/gfx/metal-touch-icon-precomposed-04.png
-https://www.sweclockers.com/feeds/nyheter
-https://www.sweclockers.com/feeds/artiklar
-https://www.sweclockers.com/feeds/marknad
-https://www.sweclockers.com/feeds/forum
-https://www.sweclockers.com/feeds/galleri
-https://www.sweclockers.com/
-https://m.sweclockers.com/

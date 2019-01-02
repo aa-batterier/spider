@@ -21,7 +21,7 @@ int main(int argc,char *argv[])
 		exit(1);
 	}
 	get_web_page(argv[1],startMemory);
-	extract_web_addresses(startMemory->text,argv[1],list);
+	extract_web_addresses(startMemory,argv[1],list);
 	//printf("main: main: startMemory\n");
 	remove_memory(startMemory);
 	while (list->size > 0)
@@ -31,7 +31,7 @@ int main(int argc,char *argv[])
 		fprintf(out,"%s\n",address->text);
 		printf("Number of elements in list: %d\n",list->size);
 		get_web_page(address->text,loopMemory);
-		extract_web_addresses(loopMemory->text,address->text,list);
+		extract_web_addresses(loopMemory,address->text,list);
 		remove_first(list);
 		//printf("main: main: loopMemory: %d\n",list->size);
 		remove_memory(loopMemory);

@@ -42,7 +42,8 @@ void remove_memory(Memory *removeMemory);
 
 /* text.c */
 size_t write_web_page(char *content,size_t size,size_t nmemb,Memory *userp);
-void extract_web_addresses(char *content,const char *addOnAddr,List *list); //,FILE *out);
+void* min(void* a,void* b);
+void extract_web_addresses(Memory *website,const char *addOnAddr,List *list); //,FILE *out);
 void add_address(const char *addOnAddr,Memory *address);
 
 #endif
