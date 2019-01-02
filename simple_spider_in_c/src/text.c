@@ -27,6 +27,10 @@ void extract_web_addresses(char *content,const char *addOnAddr,List *list) //,FI
 	for (;;)
 	{
 		Memory *address = create_memory();
+		/*
+		 * Jag borde i dessa if - satser här nedan också fri göra minnet address som jag
+		 * skapar här ovanför. Kan vara felet som jag har letat efter.
+		 */
 		if ((prev = strstr(correct,"href=")) == NULL)
 		{
 			break;
