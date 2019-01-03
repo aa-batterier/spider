@@ -42,20 +42,17 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list) //,
 	char *startPos,*endPos = content;
 	for (;;)
 	{
-<<<<<<< HEAD
 		//Memory *address = create_memory();
 		//char *address_text = (char*)malloc(1);
 		//int address_size = 1;
 		//if ((prev = strstr(correct,"href=")) == NULL)
 		if ((startPos = strstr(endPos,"href=")) == NULL)
-=======
 		Memory *address = create_memory();
 		/*
 		 * Jag borde i dessa if - satser här nedan också fri göra minnet address som jag
 		 * skapar här ovanför. Kan vara felet som jag har letat efter.
 		 */
 		if ((prev = strstr(correct,"href=")) == NULL)
->>>>>>> 5ae3ef243046f8439bf876e4ab4c33b87c42ab53
 		{
 			//remove_memory(address);
 			//free(address_text);
