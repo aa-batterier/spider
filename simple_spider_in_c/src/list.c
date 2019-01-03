@@ -7,6 +7,7 @@
  */
 List *new_list(void)
 {
+	//printf("list: new_list\n");
 	List *newList = (List*)malloc(sizeof(List));
 	*newList = (List){NULL,NULL,0};
 	return newList;
@@ -19,6 +20,7 @@ List *new_list(void)
  */
 struct Node *new_node(Memory *data)
 {
+	//printf("list: node\n");
 	struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
 	*newNode = (struct Node){NULL,data};
 	return newNode;

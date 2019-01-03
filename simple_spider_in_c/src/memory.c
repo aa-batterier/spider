@@ -2,7 +2,9 @@
 
 Memory *create_memory(void)
 {
+	//printf("memory: create_memory: newMemory\n");
 	Memory *newMemory = (Memory*)malloc(sizeof(Memory));
+	//printf("memory: create_memory: text\n");
 	*newMemory = (Memory){(char*)malloc(1),0};
 	//*newMemory = (Memory){NULL,0};
 	return newMemory;

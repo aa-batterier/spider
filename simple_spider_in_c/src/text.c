@@ -47,11 +47,10 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list) //,
 		//int address_size = 1;
 		//if ((prev = strstr(correct,"href=")) == NULL)
 		if ((startPos = strstr(endPos,"href=")) == NULL)
-		Memory *address = create_memory();
+			break;
+		startPos += 6;
+		//printf("\nSTARTPOS\n%s",startPos);
 		/*
-		 * Jag borde i dessa if - satser här nedan också fri göra minnet address som jag
-		 * skapar här ovanför. Kan vara felet som jag har letat efter.
-		 */
 		if ((prev = strstr(correct,"href=")) == NULL)
 		{
 			//remove_memory(address);
@@ -59,13 +58,10 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list) //,
 			//address_text = NULL;
 			break;
 		}
-		startPos += 6;
-		//printf("\nSTARTPOS\n%s",startPos);
+		*/
 		/*
 		if ((endPos = min(strstr(startPos,"\""),strstr(startPos,"\'"))) == NULL)
-		{
 			break;
-		}
 		*/
 		char *endPos1 = strstr(startPos,"\""),*endPos2 = strstr(startPos,"\'");
 		if (endPos1 == NULL && endPos2 != NULL)
@@ -117,12 +113,11 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list) //,
 		*/
 		//fprintf(out,"%s\n",address->text);
 		/**/
-		int stringLen = endPos-startPos+1;
+		int addLen = strlen(addOnAddr),stringLen = endPos-startPos+addLen+1;
 		char string[stringLen];
-		for (int i = 0; startPos < endPos; startPos++,i++)
-		{
+		strncpy(string,addOnAddr,addLen);
+		for (int i = addLen; startPos < endPos; startPos++,i++)
 			string[i] = *startPos;
-		}
 		string[stringLen] = '\0';
 		printf("String: %s\n",string);
 		Memory *address = create_memory();
@@ -136,7 +131,7 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list) //,
 		//free(address_text);
 		//address_text = NULL;
 		/**/
-		add_address(addOnAddr,address);
+		//add_address(addOnAddr,address);
 		add_last(list,address);
 		//correct++;
 		//correct += address->size;
@@ -164,6 +159,9 @@ void add_address(const char *addOnAddr,Memory *address)
 	{
 		char *tmp = address->text;
 		address->size += addrLen;
+		printf("addressSize: %lu\n",address->size);
+		//printf("text: add_address\n");
+		// Denna malloc är det just nu problem med.
 		address->text = (char*)malloc(address->size);
 		address->text[0] = '\0';
 		strcat(strcat(address->text,cleanAddr),tmp);
