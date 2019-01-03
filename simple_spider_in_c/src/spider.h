@@ -1,5 +1,5 @@
-#ifndef _ring_h
-#define _ring_h
+#ifndef _spider_h
+#define _spider_h
 
 #include <stdio.h>
 #include <stdlib.h>
