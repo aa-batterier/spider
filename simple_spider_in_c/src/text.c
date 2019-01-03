@@ -36,10 +36,11 @@ void* min(void* a,void* b)
  */
 void extract_web_addresses(Memory *website,const char *addOnAddr,List *list) //,FILE *out)
 {
-	char content[website->size+1];
-	strncpy(content,website->text,website->size);
+	//char content[website->size+1];
+	//strncpy(content,website->text,website->size);
 	//char *prev = content,*correct = content;
-	char *startPos,*endPos = content;
+	//char *startPos = NULL,*endPos = content;
+	char *startPos = NULL,*endPos = website->text;
 	for (;;)
 	{
 		//Memory *address = create_memory();
@@ -114,17 +115,20 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list) //,
 		//fprintf(out,"%s\n",address->text);
 		/**/
 		int addLen = strlen(addOnAddr),stringLen = endPos-startPos+addLen+1;
-		char string[stringLen];
-		strncpy(string,addOnAddr,addLen);
-		for (int i = addLen; startPos < endPos; startPos++,i++)
-			string[i] = *startPos;
-		string[stringLen] = '\0';
-		printf("String: %s\n",string);
 		Memory *address = create_memory();
-		//address->size = address_size;
-		//address->size = strlen(correct)+1;
 		address->size = stringLen;
 		address->text = (char*)realloc(address->text,address->size);
+		char string[stringLen];
+		strncpy(string,addOnAddr,addLen);
+		//strncpy(address->text,addOnAddr,addLen);
+		for (int i = addLen; startPos < endPos; startPos++,i++)
+			string[i] = *startPos;
+			//address->text[i] = *startPos;
+		string[stringLen] = '\0';
+		//address->text[stringLen] = '\0';
+		//printf("String: %s\n",string);
+		//address->size = address_size;
+		//address->size = strlen(correct)+1;
 		//strcpy(address->text,address_text);
 		//strncpy(address->text,correct,address->size);
 		strncpy(address->text,string,stringLen);
