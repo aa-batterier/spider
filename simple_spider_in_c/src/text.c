@@ -60,6 +60,7 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list,cons
 		for (; startPos < endPos; startPos++,i++)
 			string[i] = *startPos;
 		string[i] = '\0';
+		printf("%s\n",string);
 		strncpy(address->text,string,stringLen);
 		add_last(list,address);
 		// Skriver till fil.
@@ -70,8 +71,7 @@ void extract_web_addresses(Memory *website,const char *addOnAddr,List *list,cons
 			// Borde ha bättre error hantering.
 			exit(1);
 		}
-		//fprintf(out,"%s\n",string);
-		fprintf(out,"%s\n",address->text);
+		fprintf(out,"%s\n",string);
 		fclose(out);
 	}
 }

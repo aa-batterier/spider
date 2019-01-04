@@ -20,8 +20,7 @@ int main(int argc,char *argv[])
 	while (list->size > 0)
 	{
 		Memory *address = get_first(list),*loopMemory = create_memory();
-		printf("Address: %s\n",address->text);
-		printf("Number of elements in list: %d\n",list->size);
+		//printf("Number of elements in list: %d\n",list->size);
 		get_web_page(address->text,loopMemory);
 		extract_web_addresses(loopMemory,address->text,list,argv[2]);
 		remove_first(list);

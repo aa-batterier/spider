@@ -25,13 +25,11 @@ void get_web_page(const char *address,Memory *memory)
 		curl_easy_setopt(curl,CURLOPT_TIMEOUT,15000);
 		curl_easy_setopt(curl,CURLOPT_USERAGENT,"libcurl-agent/1.0");
 		if ((res = curl_easy_perform(curl)) != CURLE_OK)
-		{
-			fprintf(stderr,"curl_easy_perform() failed: %s\n",curl_easy_strerror(res));
-		}
+			fprintf(stderr,"curl_easy_perform() failed: %s on %s\n",curl_easy_strerror(res),address);
+		/*
 		else
-		{
 			printf("%lu bytes retrieved.\n",(long)memory->size);
-		}
+		*/
 		curl_easy_cleanup(curl);
 	}
 	curl_global_cleanup();
