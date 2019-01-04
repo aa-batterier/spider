@@ -14,27 +14,19 @@ int main(int argc,char *argv[])
 	}
 	Memory *startMemory = create_memory();
 	List *list = new_list();
-	FILE *out = NULL;
-	if ((out = fopen(argv[2],"a")) == NULL)
-	{
-		fprintf(stderr,"failed to open file %s\n",argv[2]);
-		exit(1);
-	}
 	get_web_page(argv[1],startMemory);
-	extract_web_addresses(startMemory,argv[1],list);
+	extract_web_addresses(startMemory,argv[1],list,argv[2]);
 	remove_memory(startMemory);
 	while (list->size > 0)
 	{
 		Memory *address = get_first(list),*loopMemory = create_memory();
 		printf("Address: %s\n",address->text);
-		fprintf(out,"%s\n",address->text);
 		printf("Number of elements in list: %d\n",list->size);
 		get_web_page(address->text,loopMemory);
-		extract_web_addresses(loopMemory,address->text,list);
+		extract_web_addresses(loopMemory,address->text,list,argv[2]);
 		remove_first(list);
 		remove_memory(loopMemory);
 	}
-	fclose(out);
 	remove_list(list);
 	exit(0);
 }
