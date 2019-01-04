@@ -22,18 +22,16 @@ int main(int argc,char *argv[])
 	}
 	get_web_page(argv[1],startMemory);
 	extract_web_addresses(startMemory,argv[1],list);
-	//printf("main: main: startMemory\n");
 	remove_memory(startMemory);
 	while (list->size > 0)
-	//for (int i = 0; i < 5; i++)
 	{
 		Memory *address = get_first(list),*loopMemory = create_memory();
+		printf("Address: %s\n",address->text);
 		fprintf(out,"%s\n",address->text);
 		printf("Number of elements in list: %d\n",list->size);
 		get_web_page(address->text,loopMemory);
 		extract_web_addresses(loopMemory,address->text,list);
 		remove_first(list);
-		//printf("main: main: loopMemory: %d\n",list->size);
 		remove_memory(loopMemory);
 	}
 	fclose(out);

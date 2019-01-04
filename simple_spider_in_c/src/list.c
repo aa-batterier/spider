@@ -7,7 +7,6 @@
  */
 List *new_list(void)
 {
-	//printf("list: new_list\n");
 	List *newList = (List*)malloc(sizeof(List));
 	*newList = (List){NULL,NULL,0};
 	return newList;
@@ -20,7 +19,6 @@ List *new_list(void)
  */
 struct Node *new_node(Memory *data)
 {
-	//printf("list: node\n");
 	struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
 	*newNode = (struct Node){NULL,data};
 	return newNode;
@@ -36,13 +34,9 @@ void add_last(List *list,Memory *data)
 	struct Node *newNode = NULL;
 	newNode = new_node(data);
 	if (list->first == NULL)
-	{
 		list->first = newNode;
-	}
 	else
-	{
 		list->last->next = newNode;
-	}
 	list->last = newNode;
 	list->size++;
 }
@@ -57,9 +51,7 @@ void remove_first(List *list)
 	struct Node *removeNode = list->first;
 	assert(removeNode != NULL);
 	list->first = removeNode->next;
-	//printf("list: remove_first: removeNode->data\n");
-	remove_memory(removeNode->data); // Borde jag ha detta här?
-	//printf("list: remove_first: removeNode\n");
+	remove_memory(removeNode->data);
 	free(removeNode);
 	removeNode = NULL;
 	list->size--;
@@ -86,7 +78,6 @@ void remove_list(List *list)
 	assert(list != NULL);
 	while (list->size > 0)
 		remove_first(list);
-	//printf("list: remove_list: list\n");
 	free(list);
 	list = NULL;
 }
