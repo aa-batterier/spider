@@ -1,22 +1,22 @@
-all: bin/spider
+all: spider
 
-lib/connections.o: src/connections.c src/spider.h
-	gcc -Wall -g -c -o $@ src/connections.c -lcurl
+connections.o: connections.c spider.h
+	gcc -Wall -g -c -o $@ connections.c -lcurl
 
-lib/list.o: src/list.c src/spider.h
-	gcc -Wall -g -c -o $@ src/list.c
+list.o: list.c spider.h
+	gcc -Wall -g -c -o $@ list.c
 
-lib/main.o: src/main.c src/spider.h
-	gcc -Wall -g -c -o $@ src/main.c
+main.o: main.c spider.h
+	gcc -Wall -g -c -o $@ main.c
 
-lib/memory.o: src/memory.c src/spider.h
-	gcc -Wall -g -c -o $@ src/memory.c
+memory.o: memory.c spider.h
+	gcc -Wall -g -c -o $@ memory.c
 
-lib/text.o: src/text.c src/spider.h
-	gcc -Wall -g -c -o $@ src/text.c
+text.o: text.c spider.h
+	gcc -Wall -g -c -o $@ text.c
 
-bin/spider: lib/connections.o lib/list.o lib/main.o lib/memory.o lib/text.o src/spider.h
-	gcc -Wall -g -o $@ lib/connections.o lib/list.o lib/main.o lib/memory.o lib/text.o -lcurl
+spider: connections.o list.o main.o memory.o text.o spider.h
+	gcc -Wall -g -o $@ connections.o list.o main.o memory.o text.o -lcurl
 
 clean:
-	rm -v bin/* lib/*
+	rm -v spider *.o
