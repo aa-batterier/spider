@@ -1,7 +1,7 @@
-all: bin/spider
+all: spider
 
-bin/spider: src/hash.cpp src/main.cpp src/spider.cpp src/spider.h src/hash.h
-	g++ -Wall -g -o $@ src/hash.cpp src/main.cpp src/spider.cpp -std=c++17 -lcurl
+spider: hash.cpp main.cpp spider.cpp spider.h hash.h
+	g++ -Wall -g -o $@ hash.cpp main.cpp spider.cpp -std=c++17 -lcurl
 
 clean:
-	rm -rv bin/*
+	rm -rv spider 
