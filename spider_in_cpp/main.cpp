@@ -33,7 +33,7 @@ int main(int argc,char *argv[])
 	std::string startAddress,addressFile,contentFile;
 	strncmp(argv[1],"default",7) == 0 ? startAddress = DEFAULT_ADDRESS : startAddress = argv[1];
 	strncmp(argv[2],"default",7) == 0 ? addressFile = DEFAULT_ADDRESS_FILE : addressFile = argv[2];
-	strncmp(argv[3],"default",7) == 0 ? contentFile = DEFAULT_CONTENT_FILE : contentFile = argv[2];
+	strncmp(argv[3],"default",7) == 0 ? contentFile = DEFAULT_CONTENT_FILE : contentFile = argv[3];
 	spider.grab_web(startAddress);
 	if (!spider.printToFile(startAddress,addressFile,contentFile))
 	{
