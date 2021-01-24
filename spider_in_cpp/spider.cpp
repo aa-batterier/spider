@@ -4,7 +4,7 @@
  *  Initial creator: Andreas Johansson.
  *  Date created: 06-05-2018
  *  Last updated by: Andreas Johansson.
- *  Date for update: 19-06-2018
+ *  Date for update: 24-01-2021
  */
 
 /*
@@ -116,7 +116,8 @@ void Spider::extract_web_addresses(const std::string addOnAddr)
 	for (;;)
 	{
 		std::string address;
-		if ((prev = strstr(correct,"href=")) == NULL)
+                char *href = strstr(correct,"href="), *HREF = strstr(correct,"HREF=");
+                if ((prev = href == NULL ? HREF : href) == NULL)
 			break;
 		if ((prev = strtok(prev,"\'\"")) == NULL)
 			break;

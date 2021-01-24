@@ -4,7 +4,7 @@
  *  Initial creator: Andreas Johansson.
  *  Date created: 06-05-2018
  *  Last updated by: Andreas Johansson.
- *  Date for update: 19-06-2018
+ *  Date for update: 24-01-2021
  */
 
 /*
@@ -52,6 +52,16 @@
  *  if no other file name is defined.
  */
 #define DEFAULT_CONTENT_FILE "webContent.txt"
+
+/*
+ * Constant: DEFAULT_CONTENT_FOLDER
+ * ---------------------------------
+ *  Define the default name on the folder
+ *  which will contain all the files which in
+ *  turn contains all the web content
+ *  if no other folder name is defined.
+ */
+#define DEFAULT_CONTENT_FOLDER "webContent"
 
 /* Classdefinitions. */
 
@@ -115,7 +125,7 @@ class Spider
 		 * ---------------------------
 		 *  grab_web grabs the website content and sort out the addresses to the queue/fifo.
 		 */
-		void grab_web(const std::string address = "https://web.archive.org/web/20080916124519/http://www.dmoz.org/");
+		void grab_web(const std::string address = DEFAULT_ADDRESS);
 
 		/*
 		 * Function: printToFile
@@ -123,7 +133,7 @@ class Spider
 		 * -----------------------
 		 * Prints the web address and web content to the specified file/files.
 		 */
-		const bool printToFile(const std::string address,const std::string addressFile = "webAddresses.txt",const std::string contentFile = "webContent.txt");
+		const bool printToFile(const std::string address,const std::string addressFile = DEFAULT_ADDRESS_FILE,const std::string contentFile = DEFAULT_CONTENT_FILE);
 
 	private:
 
